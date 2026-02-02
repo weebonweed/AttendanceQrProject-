@@ -1,47 +1,84 @@
 package com.example.model;
 
+//A Session represents one attendance event created by a teacher.
+
+import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "sessions")
 public class Session {
 	
 	@Id
-	private Integer id;
-	private String subject;
-	private Integer startTime;
-	private Integer expiryTime;
-	private Integer createdByTeacher;
-	
-	public Integer getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String subject;
+
+    private LocalDateTime startTime;
+
+    private LocalDateTime expiryTime;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
+    
+    //Teachers can view only their sessions
+
+
+    public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getSubject() {
 		return subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public Integer getStartTime() {
+
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Integer startTime) {
+
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
-	public Integer getExpiryTime() {
+
+	public LocalDateTime getExpiryTime() {
 		return expiryTime;
 	}
-	public void setExpiryTime(Integer expiryTime) {
+
+	public void setExpiryTime(LocalDateTime expiryTime) {
 		this.expiryTime = expiryTime;
 	}
-	public Integer getCreatedByTeacher() {
-		return createdByTeacher;
+
+	public User getTeacher() {
+		return teacher;
 	}
-	public void setCreatedByTeacher(Integer createdByTeacher) {
-		this.createdByTeacher = createdByTeacher;
+
+	public void setTeacher(User teacher) {
+		this.teacher = teacher;
 	}
 
 }
+
+//example 
+//                     Session Table
+//                     --------------------------------
+//                     id | subject | teacher_id       
+//                     --------------------------------
+//                     1  | Math    | 5
+//                     2  | Physics | 5
+
