@@ -1,8 +1,7 @@
 package com.example.model;
 
-//A Session represents one attendance event created by a teacher.
-
 import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,28 +9,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "sessions")
-public class Session {
-	
-	@Id
+@Table(name = "attendance",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "session_id"}))
+public class Attendance {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String subject;
-
-    private LocalDateTime startTime;
-
-    private LocalDateTime expiryTime;
+	@ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private User teacher;
+    @JoinColumn(name = "session_id", nullable = false)
+    private Session session;
+
+    private LocalDateTime markedAt;
     
-    //Teachers can view only their sessions
-
-
+    
     public Long getId() {
 		return id;
 	}
@@ -40,45 +39,28 @@ public class Session {
 		this.id = id;
 	}
 
-	public String getSubject() {
-		return subject;
+	public Student getStudent() {
+		return student;
 	}
 
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
-	public LocalDateTime getStartTime() {
-		return startTime;
+	public Session getSession() {
+		return session;
 	}
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
-	public LocalDateTime getExpiryTime() {
-		return expiryTime;
+	public LocalDateTime getMarkedAt() {
+		return markedAt;
 	}
 
-	public void setExpiryTime(LocalDateTime expiryTime) {
-		this.expiryTime = expiryTime;
+	public void setMarkedAt(LocalDateTime markedAt) {
+		this.markedAt = markedAt;
 	}
-
-	public User getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(User teacher) {
-		this.teacher = teacher;
-	}
-
 }
-
-//example 
-//                     Session Table
-//                     --------------------------------
-//                     id | subject | teacher_id       
-//                     --------------------------------
-//                     1  | Math    | 5
-//                     2  | Physics | 5
 
